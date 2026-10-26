@@ -5,7 +5,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.sterotype.Service;
+import org.springframework.stereotype.Service;
 
 import auca.ac.transit_dues.domain.DuesType;
 import auca.ac.transit_dues.repository.DuesTypeRepository;
@@ -16,7 +16,7 @@ public class DuesTypeService {
     @Autowired
     private DuesTypeRepository DuesTypeRepository;
 
-    public String saveDueString(DuesType duesType){
+    public String saveDuesType (DuesType duesType){
         DuesTypeRepository.save(duesType);
         return "Dues type saved successfully";
     }
