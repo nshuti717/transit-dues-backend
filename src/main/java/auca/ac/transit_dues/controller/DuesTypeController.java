@@ -21,7 +21,7 @@ import auca.ac.transit_dues.service.DuesTypeService;
 
 
 @RestController
-@RequestMapping("/api/dues-type")
+@RequestMapping("/api/dues-types")
 
 public class DuesTypeController {
 
@@ -57,7 +57,7 @@ public ResponseEntity<?> updateDuesType(@PathVariable UUID id, @RequestBody Dues
     }
     return new ResponseEntity<>(msg, HttpStatus.NOT_FOUND);
 } 
- @DeleteMapping("/delelte/{id}")
+ @DeleteMapping("/delete/{id}")
  public ResponseEntity<?> deleteDuesType(@PathVariable UUID id) {
     String msg = duesTypeService.deleteDuesType(id);
     if (msg.contains("successfull")) {
