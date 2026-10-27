@@ -52,7 +52,7 @@ public class StageService {
     public String deleteStage(UUID id) {
         Optional<Stage>  found = stageRepository.findById(id);
         if(found.isEmpty()) {
-            return "The stage with that di does not exist";
+            return "The stage with that id does not exist";
         }
         stageRepository.deleteById(id);
         return "Stage deleted successfully";
