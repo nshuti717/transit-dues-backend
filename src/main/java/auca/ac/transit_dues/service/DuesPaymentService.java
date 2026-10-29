@@ -1,6 +1,7 @@
 
 package auca.ac.transit_dues.service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import auca.ac.transit_dues.domain.DuesPayment;
+import auca.ac.transit_dues.domain.PaymentStatus;
 import auca.ac.transit_dues.repository.DuesPaymentRepository;
 
 @Service
@@ -63,4 +65,25 @@ public class DuesPaymentService{
         }
         return "The dues payment with that id does not exist";
     }
+
+
+
+    public List<DuesPayment> getPaymentsByStatus(PaymentStatus status) {
+
+    return duesPaymentRepository.findByStatusOrderByPaymentDateAsc(status);
+
+}
+
+public List<DuesPayment> getPaymentsBetween(LocalDate start, LocalDate end) {
+
+    return duesPaymentRepository.findByPaymentDateBetweenOrderByPaymentDateAsc(start, end);
+}
+
+
+
+
+
+
+
+
 }

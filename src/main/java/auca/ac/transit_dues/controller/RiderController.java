@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import auca.ac.transit_dues.domain.Rider;
 import auca.ac.transit_dues.service.RiderService;
 
-
+@RestController
+@RequestMapping("/api/riders")
 public class RiderController {
     @Autowired
     private RiderService riderService;
@@ -68,6 +69,17 @@ public class RiderController {
         }
         return new ResponseEntity<>(msg, HttpStatus.NOT_FOUND);
     }
+
+    @GetMapping("/by-last-name")
+
+public ResponseEntity<?> getRidersByLastName(@RequestParam String lastName) {
+
+    return new ResponseEntity<>(riderService.getRidersByLastName(lastName), HttpStatus.OK);
+    
+} 
+
+
+
 
 
 

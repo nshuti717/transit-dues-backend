@@ -11,4 +11,5 @@ import auca.ac.transit_dues.domain.DuesType;
 public interface DuesTypeRepository extends JpaRepository<DuesType, UUID>{
 
     
+    
 }

@@ -55,6 +55,11 @@ public class RiderService {
         return "The rider with that id does not exist";
     }
 
+    public List<Rider> getRidersByLastName(String lastName) {
+        
+    return riderRepository.findByLastNameIgnoreCaseOrderByFirstNameAsc(lastName);
+}
+
 
 
 

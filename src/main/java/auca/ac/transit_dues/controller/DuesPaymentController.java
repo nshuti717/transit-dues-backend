@@ -1,5 +1,6 @@
 package auca.ac.transit_dues.controller;
 
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 import auca.ac.transit_dues.domain.DuesPayment;
+import auca.ac.transit_dues.domain.PaymentStatus;
 import auca.ac.transit_dues.service.DuesPaymentService;
 
 
@@ -69,6 +71,28 @@ public class DuesPaymentController {
 
         return new ResponseEntity<>(msg, HttpStatus.NOT_FOUND);
     }
+
+
+
+    @GetMapping("/by-status")
+public ResponseEntity<?> getPaymentsByStatus(@RequestParam PaymentStatus status) {
+
+    return new ResponseEntity<>(duesPaymentService.getPaymentsByStatus(status), HttpStatus.OK);
+}
+
+@GetMapping("/between")
+public ResponseEntity<?> getPaymentsBetween(@RequestParam String start, @RequestParam String end) {
+    LocalDate startDate =LocalDate.parse(start);
+    LocalDate endDate =LocalDate.parse(end);
+
+    return new ResponseEntity<>(duesPaymentService.getPaymentsBetween(startDate, endDate), HttpStatus.OK);
+    
+}
+
+
+
+
+    
 
 
 
