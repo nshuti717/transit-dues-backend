@@ -17,6 +17,7 @@ public class RiderService {
 
     @Autowired
     private RiderRepository riderRepository;
+    
 
     public String saveRider(Rider rider) {
         riderRepository.save(rider);
@@ -56,8 +57,14 @@ public class RiderService {
     }
 
     public List<Rider> getRidersByLastName(String lastName) {
-        
+
     return riderRepository.findByLastNameIgnoreCaseOrderByFirstNameAsc(lastName);
+}
+
+
+public List<Rider> getRidersOfTreasurer(UUID treasurerId) {
+
+    return riderRepository.findRidersByTreasurerId(treasurerId);
 }
 
 

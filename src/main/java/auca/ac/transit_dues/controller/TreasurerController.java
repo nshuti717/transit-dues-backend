@@ -63,6 +63,16 @@ public class TreasurerController {
     }
 
 
+    @GetMapping("/by-dues-type")
+public ResponseEntity<?> getTreasurersByDuesType(@RequestParam String name) {
+
+    return new ResponseEntity<>(treasurerService.getTreasurersByDuesType(name), HttpStatus.OK);
+}
+
+
+
+
+
 
 
 

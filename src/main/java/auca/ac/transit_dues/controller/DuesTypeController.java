@@ -67,6 +67,12 @@ public ResponseEntity<?> updateDuesType(@PathVariable UUID id, @RequestBody Dues
     return new ResponseEntity<>(msg, HttpStatus.NOT_FOUND);
  }
 
+ @GetMapping("/unused")
+public ResponseEntity<?> getUnusedDuesTypes(){
+    
+    return new ResponseEntity<>(duesTypeService.getUnusedDuesTypes(), HttpStatus.OK);
+}
+
 
 
 

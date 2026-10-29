@@ -54,6 +54,10 @@ public class DuesTypeService {
         return "Dues type deleted successfully.";
     }
 
+    public List<DuesType> getUnusedDuesTypes() {
+    return DuesTypeRepository.findUnusedDuesTypes();
+}
+
 
 
 

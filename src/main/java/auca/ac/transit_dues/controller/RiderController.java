@@ -10,13 +10,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import auca.ac.transit_dues.domain.Rider;
+import auca.ac.transit_dues.domain.Treasurer;
 import auca.ac.transit_dues.service.RiderService;
+import auca.ac.transit_dues.service.TreasurerService;
 
 @RestController
 @RequestMapping("/api/riders")
+
 public class RiderController {
     @Autowired
     private RiderService riderService;
+    @Autowired
+private TreasurerService treasurerService;
 
     @PostMapping("/save")
     public ResponseEntity<?>saveRider(@RequestBody Rider rider) {
@@ -75,8 +80,19 @@ public class RiderController {
 public ResponseEntity<?> getRidersByLastName(@RequestParam String lastName) {
 
     return new ResponseEntity<>(riderService.getRidersByLastName(lastName), HttpStatus.OK);
-    
+
 } 
+
+@GetMapping("/of-treasurer/{treasurerId}")
+public ResponseEntity<?> getRidersOfTreasurer(@PathVariable UUID treasurerId) {
+    Optional<Treasurer> treasurer = treasurerService.getTreasurerById(treasurerId);
+    if (treasurer.isEmpty()) {
+        return new ResponseEntity<>("The treasurer with that id does not exist", HttpStatus.NOT_FOUND);
+    }
+    return new ResponseEntity<>(riderService.getRidersOfTreasurer(treasurerId), HttpStatus.OK);
+}
+
+
 
 
 

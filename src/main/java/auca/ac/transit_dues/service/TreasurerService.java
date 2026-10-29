@@ -66,6 +66,10 @@ public  class TreasurerService {
 
     }
 
+    public List<Treasurer> getTreasurersByDuesType(String name) {
+    return treasurerRepository.findByDuesTypeName(name);
+}
+
 
 
 

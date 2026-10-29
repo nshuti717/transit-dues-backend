@@ -79,6 +79,13 @@ public  class StageController {
         return  new  ResponseEntity<>(msg, HttpStatus.NOT_FOUND);
     } 
 
+    @GetMapping("/free")
+public ResponseEntity<?> getFreeStages() {
+
+    return new ResponseEntity<>(stageService.getFreeStages(), HttpStatus.OK);
+    
+}
+
 
 
     

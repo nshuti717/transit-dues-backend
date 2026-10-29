@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import auca.ac.transit_dues.domain.DuesPayment;
 import auca.ac.transit_dues.domain.PaymentStatus;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 @Repository
 public interface DuesPaymentRepository extends JpaRepository<DuesPayment, UUID>{

@@ -50,7 +50,7 @@ public class StageService {
     } 
 
     public String deleteStage(UUID id) {
-        Optional<Stage>  found = stageRepository.findById(id);
+        Optional<Stage>  found =stageRepository.findById(id);
         if(found.isEmpty()) {
             return "The stage with that id does not exist";
         }
@@ -59,7 +59,11 @@ public class StageService {
     }  
     
 
-     
+     public List<Stage> getFreeStages() {
+
+    return stageRepository.findFreeStages();
+    
+}
 
 
 
