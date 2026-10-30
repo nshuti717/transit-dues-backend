@@ -25,8 +25,13 @@ public class DuesPaymentController {
     @PostMapping("/save")
     public ResponseEntity<?> saveDuesPayment(@RequestBody DuesPayment duesPayment){
         String msg =duesPaymentService.saveDuesPayment(duesPayment);
-
-        return new ResponseEntity<>(msg, HttpStatus.CREATED);
+        if (msg.contains("successfully")) {
+            return new ResponseEntity<>(msg, HttpStatus.CREATED);
+        }
+        if (msg.contains("past")) {
+            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(msg, HttpStatus.CONFLICT);
     }
 
 
@@ -68,6 +73,10 @@ public class DuesPaymentController {
 
             return new ResponseEntity<>(msg, HttpStatus.OK);
         }
+        if (msg.contains("receipts")) {
+
+            return new ResponseEntity<>(msg, HttpStatus.CONFLICT);
+        }
 
         return new ResponseEntity<>(msg, HttpStatus.NOT_FOUND);
     }
@@ -86,7 +95,19 @@ public ResponseEntity<?> getPaymentsBetween(@RequestParam String start, @Request
     LocalDate endDate =LocalDate.parse(end);
 
     return new ResponseEntity<>(duesPaymentService.getPaymentsBetween(startDate, endDate), HttpStatus.OK);
-    
+
+}
+
+@PatchMapping("/{id}/status")
+public ResponseEntity<?> changeStatus(@PathVariable UUID id, @RequestParam PaymentStatus status) {
+    String msg = duesPaymentService.changeStatus(id, status);
+    if (msg.contains("successfully")) {
+        return new ResponseEntity<>(msg, HttpStatus.OK);
+    }
+    if (msg.contains("Cannot change")) {
+        return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
+    }
+    return new ResponseEntity<>(msg, HttpStatus.NOT_FOUND);
 }
 
 

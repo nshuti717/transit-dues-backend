@@ -69,6 +69,30 @@ public ResponseEntity<?> getTreasurersByDuesType(@RequestParam String name) {
     return new ResponseEntity<>(treasurerService.getTreasurersByDuesType(name), HttpStatus.OK);
 }
 
+@PutMapping("/{treasurerId}/dues-types/{duesTypeId}")
+public ResponseEntity<?> addDuesType(@PathVariable UUID treasurerId, @PathVariable UUID duesTypeId) {
+    String msg = treasurerService.addDuesType(treasurerId, duesTypeId);
+    if (msg.contains("added")) {
+        return new ResponseEntity<>(msg, HttpStatus.OK);
+    }
+    if (msg.contains("does not exist")) {
+        return new ResponseEntity<>(msg, HttpStatus.NOT_FOUND);
+    }
+    return new ResponseEntity<>(msg, HttpStatus.CONFLICT);
+}
+
+@PatchMapping("/{treasurerId}/stage")
+public ResponseEntity<?> changeStage(@PathVariable UUID treasurerId, @RequestParam int stageNumber) {
+    String msg = treasurerService.changeStage(treasurerId, stageNumber);
+    if (msg.contains("successfully")) {
+        return new ResponseEntity<>(msg, HttpStatus.OK);
+    }
+    if (msg.contains("does not exist")) {
+        return new ResponseEntity<>(msg, HttpStatus.NOT_FOUND);
+    }
+    return new ResponseEntity<>(msg, HttpStatus.CONFLICT);
+}
+
 
 
 

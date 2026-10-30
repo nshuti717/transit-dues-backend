@@ -18,6 +18,8 @@ public interface DuesPaymentRepository extends JpaRepository<DuesPayment, UUID>{
     
     List<DuesPayment>findByPaymentDateBetweenOrderByPaymentDateAsc(LocalDate start, LocalDate end);
 
+    boolean existsByTreasurerIdAndPaymentDateAndStatusNot(UUID treasurerId, LocalDate paymentDate, PaymentStatus status);
+
 
 
 
