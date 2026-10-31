@@ -8,6 +8,9 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import auca.ac.transit_dues.domain.DuesPayment;
 import auca.ac.transit_dues.domain.PaymentStatus;
@@ -121,6 +124,20 @@ public String changeStatus(UUID id, PaymentStatus newStatus) {
     payment.setStatus(newStatus);
     duesPaymentRepository.save(payment);
     return "Dues payment status updated successfully";
+}
+
+public List<Object[]> getStatusCounts() {
+    return duesPaymentRepository.getStatusCounts();
+}
+
+@Transactional
+public String cancelDay(UUID treasurerId, LocalDate date) {
+    int count =duesPaymentRepository.cancelDay(treasurerId, date, PaymentStatus.REVERSED, PaymentStatus.POSTED);
+    return count + " dues payments cancelled";
+}
+
+public Page<DuesPayment> getPaymentsPage(Pageable pageable) {
+    return duesPaymentRepository.findAll(pageable);
 }
 
 

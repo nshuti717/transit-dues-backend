@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 
 import auca.ac.transit_dues.domain.DuesPayment;
@@ -108,6 +111,28 @@ public ResponseEntity<?> changeStatus(@PathVariable UUID id, @RequestParam Payme
         return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
     }
     return new ResponseEntity<>(msg, HttpStatus.NOT_FOUND);
+}
+
+@GetMapping("/stats/by-status")
+public ResponseEntity<?> getStatusCounts() {
+    return new ResponseEntity<>(duesPaymentService.getStatusCounts(), HttpStatus.OK);
+}
+
+@PatchMapping("/cancel-day")
+public ResponseEntity<?> cancelDay(@RequestParam UUID treasurerId, @RequestParam String date) {
+    LocalDate day =LocalDate.parse(date);
+    return new ResponseEntity<>(duesPaymentService.cancelDay(treasurerId, day), HttpStatus.OK);
+}
+
+@GetMapping("/page")
+public ResponseEntity<?> getPaymentsPage(@RequestParam int page, @RequestParam int size, @RequestParam String sort) {
+    String[] parts =sort.split(",");
+    Sort sortObject =Sort.by(parts[0]);
+    if (parts.length > 1 && parts[1].equalsIgnoreCase("desc")) {
+        sortObject = sortObject.descending();
+    }
+    Pageable pageable =PageRequest.of(page, size, sortObject);
+    return new ResponseEntity<>(duesPaymentService.getPaymentsPage(pageable), HttpStatus.OK);
 }
 
 
