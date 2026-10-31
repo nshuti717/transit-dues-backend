@@ -53,7 +53,7 @@ public  class StageController {
             return new ResponseEntity<>(stage.get(), HttpStatus.OK);
 
         }
-        return new ResponseEntity<>("The Stage with that id does not exit", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("The Stage with that id does not exist", HttpStatus.NOT_FOUND);
 
 
 
