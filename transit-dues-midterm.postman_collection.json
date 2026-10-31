@@ -1,0 +1,322 @@
+{
+  "info": {
+    "name": "transit-dues-midterm",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080" },
+    { "key": "riderId", "value": "aaf9d839-acdb-44a0-b19a-89660f33dcbe" },
+    { "key": "plateNumber", "value": "RD 123 A" },
+    { "key": "treasurerIdJean", "value": "a6c23d5f-e9e0-4331-ba12-c958ad361532" },
+    { "key": "treasurerIdEric", "value": "ed9e5317-fe6d-47bc-9172-cbd56d9b4c9f" },
+    { "key": "duesTypeIdWelfare", "value": "06da2127-a832-42b0-bf0c-9de8ae572c36" },
+    { "key": "postedPaymentId", "value": "4608cbf4-a686-4b8e-8069-88acf0acce10" },
+    { "key": "declaredPaymentId", "value": "7898feeb-8556-462e-8642-f83ff6373fad" },
+    { "key": "duesPaymentIdForA2", "value": "" },
+    { "key": "receiptId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "A",
+      "item": [
+        {
+          "name": "A2 save",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/dues-payments/save", "host": ["{{baseUrl}}"], "path": ["api", "dues-payments", "save"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"paymentDate\":\"2026-12-10\",\"status\":\"POSTED\",\"amount\":1000,\"rider\":{\"id\":\"{{riderId}}\"},\"treasurer\":{\"id\":\"{{treasurerIdJean}}\"}}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "A2: CRUD for the five entities (DuesPayment shown as the example, same pattern for dues-types, stages, treasurers, riders). Expect 201 'Dues payment saved successfully'. Copy the new id into duesPaymentIdForA2."
+          }
+        },
+        {
+          "name": "A2 all",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/dues-payments/all", "host": ["{{baseUrl}}"], "path": ["api", "dues-payments", "all"] },
+            "description": "Expect 200 with the full list of dues payments."
+          }
+        },
+        {
+          "name": "A2 by id",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/dues-payments/{{duesPaymentIdForA2}}", "host": ["{{baseUrl}}"], "path": ["api", "dues-payments", "{{duesPaymentIdForA2}}"] },
+            "description": "Expect 200 with the entity, or 404 'The dues payment with that id does not exist' for an unknown id."
+          }
+        },
+        {
+          "name": "A2 update",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/dues-payments/update/{{duesPaymentIdForA2}}", "host": ["{{baseUrl}}"], "path": ["api", "dues-payments", "update", "{{duesPaymentIdForA2}}"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"paymentDate\":\"2026-12-10\",\"amount\":1200}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Expect 200 'Dues payment updated successfully'."
+          }
+        },
+        {
+          "name": "A2 delete",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/api/dues-payments/delete/{{duesPaymentIdForA2}}", "host": ["{{baseUrl}}"], "path": ["api", "dues-payments", "delete", "{{duesPaymentIdForA2}}"] },
+            "description": "Expect 200 'Dues payment deleted successfully'."
+          }
+        }
+      ]
+    },
+    {
+      "name": "B",
+      "item": [
+        {
+          "name": "B1",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/riders/by-last-name?lastName=niyonzima",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "riders", "by-last-name"],
+              "query": [{ "key": "lastName", "value": "niyonzima" }]
+            },
+            "description": "DERIVED. Expect 200 with riders named Niyonzima, sorted by firstName A to Z, case-insensitive match."
+          }
+        },
+        {
+          "name": "B2",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/dues-payments/by-status?status=DECLARED",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "dues-payments", "by-status"],
+              "query": [{ "key": "status", "value": "DECLARED" }]
+            },
+            "description": "DERIVED. Expect 200 with DECLARED payments, earliest paymentDate first."
+          }
+        },
+        {
+          "name": "B3",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/dues-payments/between?start=2026-10-01&end=2026-10-31",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "dues-payments", "between"],
+              "query": [
+                { "key": "start", "value": "2026-10-01" },
+                { "key": "end", "value": "2026-10-31" }
+              ]
+            },
+            "description": "DERIVED. Expect 200 with October 2026 payments, both bounds inclusive, ordered by paymentDate."
+          }
+        }
+      ]
+    },
+    {
+      "name": "C",
+      "item": [
+        {
+          "name": "C1",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/treasurers/by-dues-type?name=daily",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "treasurers", "by-dues-type"],
+              "query": [{ "key": "name", "value": "daily" }]
+            },
+            "description": "JPQL, JOIN on collection, LOWER. Expect 200 with every treasurer holding a dues type matching 'daily', case-insensitive."
+          }
+        },
+        {
+          "name": "C2",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/stages/free", "host": ["{{baseUrl}}"], "path": ["api", "stages", "free"] },
+            "description": "JPQL, NOT EXISTS. Expect 200 with stages that have no treasurer, sorted by stageNumber."
+          }
+        },
+        {
+          "name": "C3",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/dues-types/unused", "host": ["{{baseUrl}}"], "path": ["api", "dues-types", "unused"] },
+            "description": "JPQL, IS EMPTY. Expect 200 with dues types nobody holds (Insurance Levy in the seed data)."
+          }
+        },
+        {
+          "name": "C4",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/riders/of-treasurer/{{treasurerIdJean}}", "host": ["{{baseUrl}}"], "path": ["api", "riders", "of-treasurer", "{{treasurerIdJean}}"] },
+            "description": "JPQL, DISTINCT, path navigation. Expect 200 with each rider that has a payment with this treasurer, listed once. A bad id returns 404 'The treasurer with that id does not exist'."
+          }
+        }
+      ]
+    },
+    {
+      "name": "D",
+      "item": [
+        {
+          "name": "D1",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/dues-payments/save", "host": ["{{baseUrl}}"], "path": ["api", "dues-payments", "save"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"paymentDate\":\"2026-10-01\",\"status\":\"POSTED\",\"amount\":1000,\"rider\":{\"id\":\"{{riderId}}\"},\"treasurer\":{\"id\":\"{{treasurerIdJean}}\"}}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Safe saving. This past date demonstrates the failing case: expect 400 'Dues payment date cannot be in the past'. Change paymentDate to a future date not already used by treasurerIdJean to see 201 'Dues payment saved successfully' instead."
+          }
+        },
+        {
+          "name": "D2",
+          "request": {
+            "method": "PATCH",
+            "url": {
+              "raw": "{{baseUrl}}/api/dues-payments/{{declaredPaymentId}}/status?status=VERIFIED",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "dues-payments", "{{declaredPaymentId}}", "status"],
+              "query": [{ "key": "status", "value": "VERIFIED" }]
+            },
+            "description": "Status flow. declaredPaymentId is DECLARED, so DECLARED to VERIFIED is legal: expect 200 'Dues payment status updated successfully'. Run it again with status=DECLARED afterwards to see 400 'Cannot change status from VERIFIED to DECLARED'."
+          }
+        },
+        {
+          "name": "D3",
+          "request": {
+            "method": "PUT",
+            "url": {
+              "raw": "{{baseUrl}}/api/treasurers/{{treasurerIdEric}}/dues-types/{{duesTypeIdWelfare}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "treasurers", "{{treasurerIdEric}}", "dues-types", "{{duesTypeIdWelfare}}"]
+            },
+            "description": "Add one dues type to a treasurer. First run: 200 'Dues type added to the treasurer' (or 409 'The treasurer already has that dues type' if run again)."
+          }
+        },
+        {
+          "name": "D4",
+          "request": {
+            "method": "PATCH",
+            "url": {
+              "raw": "{{baseUrl}}/api/treasurers/{{treasurerIdEric}}/stage?stageNumber=4",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "treasurers", "{{treasurerIdEric}}", "stage"],
+              "query": [{ "key": "stageNumber", "value": "4" }]
+            },
+            "description": "Move a treasurer to another stage. Expect 200 'Stage changed successfully' (or 409 'That stage is taken by another treasurer' if stageNumber is already occupied)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "E",
+      "item": [
+        {
+          "name": "E1",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/receipts/save?duesPaymentId={{postedPaymentId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "receipts", "save"],
+              "query": [{ "key": "duesPaymentId", "value": "{{postedPaymentId}}" }]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"receiptType\":\"Daily Contribution\",\"remarks\":\"Paid in cash at the stage\",\"amountRwf\":1000}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Write a receipt. postedPaymentId is POSTED. Expect 201 'Receipt saved successfully'. Copy the new id into receiptId for E3."
+          }
+        },
+        {
+          "name": "E2",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/receipts/rider/{{plateNumber}}", "host": ["{{baseUrl}}"], "path": ["api", "receipts", "rider", "{{plateNumber}}"] },
+            "description": "Receipt history of a rider. Expect 200 with that rider's receipts, newest issuedDate first."
+          }
+        },
+        {
+          "name": "E3",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/api/receipts/delete/{{receiptId}}", "host": ["{{baseUrl}}"], "path": ["api", "receipts", "delete", "{{receiptId}}"] },
+            "description": "Delete and protect. Expect 200 'Receipt deleted successfully', or 404 'The receipt with that id does not exist' for a bad id. Deleting dues-payments/delete/{{postedPaymentId}} while a receipt still exists returns 409 'That dues payment has receipts, delete them first'."
+          }
+        }
+      ]
+    },
+    {
+      "name": "F",
+      "item": [
+        {
+          "name": "F1",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/dues-payments/stats/by-status", "host": ["{{baseUrl}}"], "path": ["api", "dues-payments", "stats", "by-status"] },
+            "description": "Dues payments per status. Expect 200 with one row per status that has at least one payment."
+          }
+        },
+        {
+          "name": "F2",
+          "request": {
+            "method": "PATCH",
+            "url": {
+              "raw": "{{baseUrl}}/api/dues-payments/cancel-day?treasurerId={{treasurerIdJean}}&date=2026-10-20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "dues-payments", "cancel-day"],
+              "query": [
+                { "key": "treasurerId", "value": "{{treasurerIdJean}}" },
+                { "key": "date", "value": "2026-10-20" }
+              ]
+            },
+            "description": "Treasurer is absent. Expect 200 with a message like 'N dues payments cancelled'. Already-POSTED payments on that date stay POSTED."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Bonus",
+      "item": [
+        {
+          "name": "Bonus dashboard",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/dashboard/summary", "host": ["{{baseUrl}}"], "path": ["api", "dashboard", "summary"] },
+            "description": "Expect 200 with an ordered JSON object: riders, treasurers, freeStages, paymentsToday, declared, receipts."
+          }
+        },
+        {
+          "name": "Bonus page",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/dues-payments/page?page=0&size=5&sort=paymentDate,desc",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "dues-payments", "page"],
+              "query": [
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "5" },
+                { "key": "sort", "value": "paymentDate,desc" }
+              ]
+            },
+            "description": "Expect 200 with 5 items, plus totalPages and totalElements in the response."
+          }
+        }
+      ]
+    }
+  ]
+}
