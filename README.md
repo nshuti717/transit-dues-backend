@@ -2,7 +2,7 @@
 
 TransitDues is a backend API for a moto-taxi cooperative. It replaces the paper dues ledger. A rider pays dues, a treasurer records the payment, and the payment moves through a status flow until it is posted and a receipt is written for it.
 
-Built with Spring Boot, Spring Data JPA and PostgreSQL, for the Web Technology and Internet mid-term project.
+Built with Spring Boot, Spring Data JPA and PostgreSQL.
 
 ## Student
 
