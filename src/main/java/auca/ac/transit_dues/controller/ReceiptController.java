@@ -21,6 +21,7 @@ public class ReceiptController {
     public ResponseEntity<?> saveReceipt(@RequestBody Receipt receipt, @RequestParam UUID duesPaymentId) {
         String msg = receiptService.saveReceipt(receipt, duesPaymentId);
         if (msg.contains("successfully")) {
+
             return new ResponseEntity<>(msg, HttpStatus.CREATED);
         }
         if (msg.contains("does not exist")) {
